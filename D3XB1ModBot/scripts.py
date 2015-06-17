@@ -4,7 +4,7 @@ import praw
 import time
 import traceback
 from pprint import pprint
-import datetime
+from datetime import datetime
 import time
 
 def updateFaFList(r):
@@ -133,9 +133,13 @@ def updateFaFList(r):
                     print("Dropped %s from list" % GTDropList[i])
 
     print("Adding entries to the list")
-    postTextSplitUpdated = postTextSplit[:22]
+    for i, row in enumerate(postTextSplit):
+        if ":--|" in row:
+            listStart = i +1
+            break
+    postTextSplitUpdated = postTextSplit[:listStart]
     postTextSplitUpdated.extend(entryList)
-    postTextSplitUpdated.extend(postTextSplit[22:])
+    postTextSplitUpdated.extend(postTextSplit[listStart:])
     postTextUpdated = "\n".join(postTextSplitUpdated)
     print("Updating post table")
     faf.edit(postTextUpdated)
@@ -148,3 +152,4 @@ def updateFaFList(r):
 #         if GTDropList[i] in row:
 #             del postTextSplit[j]
 # print(postTextSplit)
+
